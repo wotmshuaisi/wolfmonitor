@@ -2,8 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>acctack map</title>
-		<link type="image/x-icon" rel="shortcut icon" href="https://avatars3.githubusercontent.com/u/4074517?v=3&s=40" />
+		<title>Proxy Connections Monitor</title>
 		<link rel="stylesheet" type="text/css" href="./styles/ipviking.css">
 		<link rel="stylesheet" type="text/css" href="./styles/flags.css">
 		<link rel="stylesheet" type="text/css" href="./styles/fonts.css">
@@ -45,7 +44,7 @@
 						<div class="table-header">
 							<h1>
 								<span class="icon-open"></span>
-								Clients
+								Server
 							</h1>
 						</div>
 					</a>
@@ -94,42 +93,6 @@
 						</table>
 					</div>
 				</div>
-				<div id="console" class="box gray-bg">
-					<a href="#" class="toggle" data-target="#console-table-container">
-						<div class="table-header">
-							<h1 class="table-header">
-							<span class="icon-open"></span>
-							Client List
-							</h1>
-						</div>
-					</a>
-					<div id="console-table-container">
-						<table id="events-data">
-							<colgroup class="second-level">
-							<col class="timestamp-col" span="1">
-							<!-- <col class="attacker-org-col left-border" span="1"> -->
-							<col class="location-col" span="1">
-							<col class="attacker-ip-col" span="1">
-							<col class="location-col left-border" span="1">
-							<col class="service-col left-border" span="1">
-							<col class="port-col" span="1">
-							</colgroup>
-							<tr class="first-level">
-								<th colspan="3" class="attacker">Client</th>
-								<th class="target">Local</th>
-							</tr>
-							<tr class="second-level">
-								<th>Time</th>
-								<!-- <th>Geo</th> -->
-								<th>Location</th>
-								<th>IP</th>
-								<th>Location</th>
-								<th>Type</th>
-								<th>Port</th>
-							</tr>
-						</table>
-					</div>
-				</div>
 				<div class="info-controls">
 					<div data-paused="false" class="gray-bg controls">
 						<span class="icon-pause play-pause"></span>
@@ -147,11 +110,16 @@
 				</div>
 				</div>
 			</div>
+			<div class="newconsole">
+				<ul id="events-data1">
+				</ul>
+			</div>
 		</div>
 	<script type="text/javascript" src="./scripts/d3.v3.min.js"></script>
 	<script type="text/javascript" src="./scripts/queue.v1.min.js"></script>
 	<script type="text/javascript" src="./scripts/topojson.v1.min.js"></script>
 	<!--<script type="text/javascript" src="http://map.ipviking.com/ipviking.js"></script>-->
+	<script type="text/javascript" src="./scripts/jquery-3.3.1.min.js"></script>	
 	<script type="text/javascript" src="./scripts/ipviking.js"></script>
 	<script type="text/javascript" src="./scripts/presentations.js"></script>
 </body>

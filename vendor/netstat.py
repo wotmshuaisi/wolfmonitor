@@ -168,6 +168,31 @@ def _get_pid_of_inode(inode):
             pass
     return None
 
+def netstat_tcp6():
+    '''
+    This function returns a list of tcp connections utilizing ipv6. Please note that in order to return the pid of of a
+    network process running on the system, this script must be ran as root.
+    '''
+    tcpcontent = _tcp6load()
+    tcpresult = []
+    for line in tcpcontent:
+        line_array = _remove_empty(line.split(' '))
+        l_host, l_port = _convert_ipv6_port(line_array[1])
+        r_host, r_port = _convert_ipv6_port(line_array[2])
+        tcp_id = line_array[0]
+        state = TCP_STATE[line_array[3]]
+        uid = pwd.getpwuid(int(line_array[7]))[0]
+        inode = line_array[9]
+        pid = _get_pid_of_inode(inode)
+        try:                                            # try read the process name.
+            exe = os.readlink('/proc/' + pid + '/exe')
+        except:
+            exe = None
+
+        nline = [tcp_id, uid, l_host + ':' + l_port,
+                 r_host + ':' + r_port, state, pid, exe]
+        tcpresult.append(nline)
+    return tcpresult
 
 if __name__ == '__main__':
     print("\nTCP (v4) Results:\n")

@@ -58,7 +58,7 @@ class Location:
     def json_format(self):
         temp_dict = {
             "country": self.country,
-            "countrycode": self.country2,
+            "countrycode": self.countrycode,
             "city": self.city,
             "longitude": self.longitude,
             "latitude": self.latitude,
@@ -96,12 +96,14 @@ def get_remote_detail():
     resultList = []
     netList = netstat_tcp4()
     for item in netList:
-        if item[4] != "ESTABLISHED" and item[3].startswith("127.0.0.1"):
+        if item[4] != "ESTABLISHED" and item[3].startswith("127.0.0.1") or item[2].endswith(config.SERVER_PORT):
             continue
         temp_ip = item[3].split(":")[0]
         if is_internal_ip(temp_ip):
             continue
         temp_port = item[2].split(":")[1]
+        if temp_port != config.MONITOR_PORT:
+            continue
         temp_dict = {
             "country": None,
             "countrycode": None,
@@ -120,20 +122,20 @@ def get_remote_detail():
         # target
         geohandler.ip_addr = temp_ip
         try:
-            temp_dict["country2"] = geohandler.get_country()
-            temp_dict["countrycode2"] = geohandler.get_country_code()
-            temp_dict["city2"] = geohandler.get_city_name()
-            l1, l2 = geohandler.get_location()
-            temp_dict["latitude2"] = l1
-            temp_dict["longitude2"] = l2
-            # source
-            geohandler.ip_addr = config.SERVER_IP
             temp_dict["country"] = geohandler.get_country()
             temp_dict["countrycode"] = geohandler.get_country_code()
             temp_dict["city"] = geohandler.get_city_name()
             l1, l2 = geohandler.get_location()
             temp_dict["latitude"] = l1
             temp_dict["longitude"] = l2
+            # source
+            geohandler.ip_addr = config.SERVER_IP
+            temp_dict["country2"] = geohandler.get_country()
+            temp_dict["countrycode2"] = geohandler.get_country_code()
+            temp_dict["city2"] = geohandler.get_city_name()
+            l1, l2 = geohandler.get_location()
+            temp_dict["latitude2"] = l1
+            temp_dict["longitude2"] = l2
             # location object
             l_obj = Location(**temp_dict)
             resultList.append(l_obj)

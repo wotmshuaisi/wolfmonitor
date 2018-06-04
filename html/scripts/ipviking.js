@@ -65,7 +65,7 @@ function hideMessage() {
 
     // Websocket 设置
     //wsHost: "ws://64.19.78.244:443/",
-    wsHost: "ws://172.17.0.4:9999",
+    wsHost: "ws://127.0.0.1:9999/ws",
     psk: "18c989796c61724d4661b019f2779848dd69ae62",
     wsTimeout: 30000
   };
@@ -1383,7 +1383,6 @@ function hideMessage() {
     var attack = legend.append("div"),
       width = 20,
       height = 20;
-    attack.append("h4").text("每个粒子代表一个攻击");
     attack.append("canvas")
       .attr("width", width * 2)
       .attr("height", height * 2)
@@ -1782,40 +1781,40 @@ function hideMessage() {
         },
 
         redraw: function() {
-          var that = this;
-          var rows = d3.select("#events-data").selectAll("tr.row")
-            .data(this.state, function(d) {
-              return d.id;
-            });
+          // var that = this;
+          // var rows = d3.select("#events-data").selectAll("tr.row")
+          //   .data(this.state, function(d) {
+          //     return d.id;
+          //   });
 
-          rows.enter().append("tr")
-            .style("color", function(d) {
-              return colorizer(d.dport);
-            })
-            .attr("class", "row");
-          rows.exit().remove();
+          // rows.enter().append("tr")
+          //   .style("color", function(d) {
+          //     return colorizer(d.dport);
+          //   })
+          //   .attr("class", "row");
+          // rows.exit().remove();
 
-          var cols = rows.selectAll("td")
-            .data(function(d) {
-              return [
-                d.datetime,
-                // spanWrap(d.org, ["org", "overflow"]),
-                spanWrap(
-                  (d.city === "" ? "unknown" : d.city) + ", " +
-                  countryModel.getByIso2(d.country).country, ["location", "overflow"]),
-                d.md5,
-                spanWrap(
-                  (d.city2 === "" ? "unknown" : d.city2) + ", " +
-                  countryModel.getByIso2(d.country2).country, ["location", "overflow", "numeric"]),
-                spanWrap(d.service || "unknown", ["service", "overflow"]),
-                spanWrap(d.dport, ["numeric"])
-              ];
-            });
-          cols.enter().append("td")
-            .html(function(d) {
-              return d;
-            });
-          cols.exit().remove();
+          // var cols = rows.selectAll("td")
+          //   .data(function(d) {
+          //     return [
+          //       d.datetime,
+          //       // spanWrap(d.org, ["org", "overflow"]),
+          //       spanWrap(
+          //         (d.city === "" ? "unknown" : d.city) + ", " +
+          //         countryModel.getByIso2(d.country).country, ["location", "overflow"]),
+          //       d.md5,
+          //       spanWrap(
+          //         (d.city2 === "" ? "unknown" : d.city2) + ", " +
+          //         countryModel.getByIso2(d.country2).country, ["location", "overflow", "numeric"]),
+          //       spanWrap(d.service || "unknown", ["service", "overflow"]),
+          //       spanWrap(d.dport, ["numeric"])
+          //     ];
+          //   });
+          // cols.enter().append("td")
+          //   .html(function(d) {
+          //     return d;
+          //   });
+          // cols.exit().remove();
         }
 
       })
@@ -1928,6 +1927,16 @@ function hideMessage() {
         } else {
           this.insert(d);
           statsManager.redraw();
+          // write data to ul li
+          $("#events-data1").prepend($("<li>").html(
+            d.datetime.replace("&ensp", " ") + "<br />" + "Client: " +
+            d.md5 + " " +
+            d.city + " " +
+            d.countrycode + "<br />" + "Port: " +
+            d.dport + " "
+            // d.city2 + " " +
+            // d.countrycode2
+          ));
         }
       },
 
@@ -1957,7 +1966,7 @@ function hideMessage() {
 
     webSocket.onopen = function() {
       wsDiscTime = 0;
-      d3.select("#events-data").selectAll("tr.row").remove();
+      // d3.select("#events-data").selectAll("tr.row").remove();
       webSocket.send(psk || settings.psk);
     };
 
@@ -2028,6 +2037,7 @@ function hideMessage() {
         console.log("websocket closed, reconnecting in " + interval + "ms");
         start(loc, psk);
       }, interval);
+      // clear
     };
 
     return webSocket;

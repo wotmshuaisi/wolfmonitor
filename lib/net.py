@@ -94,13 +94,15 @@ def get_remote_detail():
     get rmote connection info
     """
     resultList = []
+    repeatList = []
     netList = netstat_tcp4()
     for item in netList:
         if item[4] != "ESTABLISHED" and item[3].startswith("127.0.0.1") or item[2].endswith(config.SERVER_PORT):
             continue
         temp_ip = item[3].split(":")[0]
-        if is_internal_ip(temp_ip):
+        if is_internal_ip(temp_ip) or temp_ip in repeatList:
             continue
+        repeatList.append(temp_ip)
         temp_port = item[2].split(":")[1]
         if temp_port != config.MONITOR_PORT:
             continue

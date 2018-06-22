@@ -5,25 +5,6 @@ from config import config
 from lib.geoip import GeoIPClient
 from vendor.netstat import netstat_tcp4, netstat_udp4
 
-"""
-{
-    'countrycode': 'China',
-    'country': 'CN',
-    'longitude': 120.1614,
-    'latitude': 30.2936
-    'city': 'Hangzhou',
-    'dport': '80',
-    'zerg': 'rush',
-    'countrycode2': 'Singapore',
-    'country2': 'SG',
-    'city2': 'Singapore',
-    'longitude2': 103.8565,
-    'latitude2': 1.2854999999999999,
-    'md5': '223.5.5.5',
-    'type': 'ipviking.honey',
-}
-"""
-
 
 class Location:
     country = ""
@@ -76,8 +57,6 @@ class Location:
 
 
 def ip_into_int(ip):
-    # 先把 192.168.1.13 变成16进制的 c0.a8.01.0d ，再去了“.”后转成10进制的 3232235789 即可。
-    # (((((192 * 256) + 168) * 256) + 1) * 256) + 13
     return reduce(lambda x, y: (x << 8) + y, map(int, ip.split('.')))
 
 
@@ -97,15 +76,20 @@ def get_remote_detail():
     repeatList = []
     netList = netstat_tcp4()
     for item in netList:
+        temp_ip = item[3].split(":")[0]
+        temp_port = item[2].split(":")[1]
+        repeat_str = "{}:{}".format(temp_ip, temp_port)
+        # filter ESTABLISHED connectiointernaln without websocket server port
         if item[4] != "ESTABLISHED" and item[3].startswith("127.0.0.1") or item[2].endswith(config.SERVER_PORT):
             continue
-        temp_ip = item[3].split(":")[0]
-        if is_internal_ip(temp_ip) or temp_ip in repeatList:
+        # filter monitor port
+        if temp_port not in config.MONITOR_PORT:
             continue
-        repeatList.append(temp_ip)
-        temp_port = item[2].split(":")[1]
-        if temp_port != config.MONITOR_PORT:
+        # filter remote ip and non repeat
+        if is_internal_ip(temp_ip) or repeat_str in repeatList:
             continue
+        repeatList.append(repeat_str)
+
         temp_dict = {
             "country": None,
             "countrycode": None,

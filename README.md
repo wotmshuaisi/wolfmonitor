@@ -7,6 +7,10 @@
 
 ## How to use
 
+- geoip database
+
+download the geoip database from offical website [GeoLite2-City.tar.gz](http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz), decompress it, and put it on this program's data directory
+
 - _config/config.py_
 
 ```python

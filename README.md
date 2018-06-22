@@ -25,7 +25,7 @@ MONITOR_PORT = "443" # which port your wanna monitor
 
 ```shell
 docker build .
-docker run -d xxx
+docker run -d -p 80:80 xxx
 ```
 
 - _run websocket server_

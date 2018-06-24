@@ -14,7 +14,7 @@ download the geoip database from offical website [GeoLite2-City.tar.gz](http://g
 - _config/config.py_
 
 ```python
-SERVER_IP = "0.0.0.0" # your server address
+SERVER_IP = "[your websocker server address]" # your server address, do not set to 0.0.0.0
 SERVER_PORT = "9999" # websocket listen port
 MONITOR_PORT = "443" # which port your wanna monitor
 ```
@@ -22,7 +22,7 @@ MONITOR_PORT = "443" # which port your wanna monitor
 - _html/script/ipviking.js_
 
 ```js
-    wsHost: "ws://127.0.0.1:9999/ws", // websocket address & port
+    wsHost: "ws://[your websocker server address]:9999/ws", // websocket server address & port
 ```
 
 - _build the nginx docker_
